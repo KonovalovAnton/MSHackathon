@@ -29,6 +29,6 @@ public class CharacterBehavior : MonoBehaviour {
 
 	public void Kill() {
 		Debug.Log("ID " + id + " has died");
-		Destroy(this);
+		gameObject.SetActive(false);
 	}
 }
