@@ -26,7 +26,7 @@ public class ServerLogic : Photon.MonoBehaviour {
 	}
 
 	void Update () {
-		if (PhotonNetwork.playerList.Length == 2 && PhotonNetwork.isMasterClient) {
+		if (PhotonNetwork.playerList.Length == 1 && PhotonNetwork.isMasterClient) {
 
 			if (police == null) {
 				police = new TurnInfo ();

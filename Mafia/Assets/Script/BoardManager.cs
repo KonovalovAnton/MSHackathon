@@ -8,7 +8,7 @@ public class BoardManager : MonoBehaviour {
 
 	public static ArrayList colors = new ArrayList();
 
-	public static int columns = 8;
+	public static int columns = 10;
 	public static int rows = 10;
 	public GameObject floorTile;
 	public GameObject outerWall;
@@ -90,6 +90,11 @@ public class BoardManager : MonoBehaviour {
 		// Lamps
 		((Tile)tiles[2][8]).tileType = TileType.UNPASSABLE;
 		((Tile)tiles[5][2]).tileType = TileType.UNPASSABLE;
+
+		// Bench
+		((Tile)tiles[6][1]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[7][1]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[8][1]).tileType = TileType.UNPASSABLE;
 	}
 
 	public static ArrayList getPossiblePaths(int x, int y) {

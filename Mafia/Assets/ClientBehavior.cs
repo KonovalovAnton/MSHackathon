@@ -8,7 +8,7 @@ public class ClientBehavior: Photon.MonoBehaviour {
 	static Object playerPrefab;
 	public GameObject playerPref;
 	static Tile startPos;
-	static int maxSteps = 4;
+	static int maxSteps = 144;
 	static int stepCounter = 0;
 
 	[PunRPC]
