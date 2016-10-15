@@ -8,7 +8,7 @@ public class ClientBehavior: Photon.MonoBehaviour {
 	static Object playerPrefab;
 	public GameObject playerPref;
 	static Tile startPos;
-	static int maxSteps = 5;
+	static int maxSteps = 4;
 	static int stepCounter = 0;
 
 	[PunRPC]
@@ -142,6 +142,11 @@ public class ClientBehavior: Photon.MonoBehaviour {
 		if (key == keySelf) {
 			t.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);
 			startPos = tile.deepCopy();
+		} else 
+		{
+			int index = Random.Range(0,BoardManager.colors.Count);
+			t.GetComponent<SpriteRenderer>().color = (Color)BoardManager.colors[index];
+			BoardManager.colors.RemoveAt(index);
 		}
 
 		p.prefab = t.transform;

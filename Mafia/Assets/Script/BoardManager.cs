@@ -6,6 +6,8 @@ using System;
 public class BoardManager : MonoBehaviour {
 
 
+	public static ArrayList colors = new ArrayList();
+
 	public static int columns = 8;
 	public static int rows = 10;
 	public GameObject floorTile;
@@ -17,6 +19,12 @@ public class BoardManager : MonoBehaviour {
 	void InitList() {
 		tiles = new Tile[columns][];
 		gridPositions.Clear();
+		colors.Add(new Color(1f, 0.596f, 0f)); // orange
+		colors.Add(new Color(0.32f, 0.42f, 0.99f)); // blue
+		colors.Add(new Color(1f, 0.92f, 0.23f)); // yellow
+		colors.Add(new Color(0.3f, 0.68f, 0.31f)); // green
+		colors.Add(new Color(0.36f, 0.25f, 0.21f)); // brown
+		colors.Add(new Color(0.31f, 0.17f, 0.65f)); // purple
 	}
 
 	void BoardSetup() {
@@ -55,6 +63,7 @@ public class BoardManager : MonoBehaviour {
 			x_offset -= 0.5f;
 			y_offset -= 0.25f; 
 		}
+		AwesomeHardcodeStuff();
 	}
 
 //	Vector2 randomPosition() {
@@ -68,6 +77,20 @@ public class BoardManager : MonoBehaviour {
 //
 //		return randomPos;
 //	}
+
+	public void AwesomeHardcodeStuff() {
+		// Awesome car
+		((Tile)tiles[0][0]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[0][1]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[1][0]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[1][1]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[2][0]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[2][1]).tileType = TileType.UNPASSABLE;
+
+		// Lamps
+		((Tile)tiles[2][8]).tileType = TileType.UNPASSABLE;
+		((Tile)tiles[5][2]).tileType = TileType.UNPASSABLE;
+	}
 
 	public static ArrayList getPossiblePaths(int x, int y) {
 		ArrayList res = new ArrayList();
