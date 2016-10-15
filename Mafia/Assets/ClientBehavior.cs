@@ -235,7 +235,7 @@ public class Player
 		float rnd = Random.value;
 
 		if (rnd > probability) {
-			hair = ((Player)ClientBehavior.players[0]).portrait.hair;
+			hair = ((Player)ClientBehavior.players[1]).portrait.hair;
 		}
 		else {
 			hair = Random.Range(0, 5);
@@ -244,7 +244,7 @@ public class Player
 		rnd = Random.value;
 
 		if (rnd > probability) {
-			head = ((Player)ClientBehavior.players[0]).portrait.head;
+			head = ((Player)ClientBehavior.players[1]).portrait.head;
 		}
 		else {
 			head = Random.Range(0, 4);
@@ -253,7 +253,7 @@ public class Player
 		rnd = Random.value;
 
 		if (rnd > probability) {
-			shirt = ((Player)ClientBehavior.players[0]).portrait.shirt;
+			shirt = ((Player)ClientBehavior.players[1]).portrait.shirt;
 		}
 		else {
 			shirt = Random.Range(0, 3);
