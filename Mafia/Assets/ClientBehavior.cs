@@ -8,13 +8,13 @@ public class ClientBehavior: Photon.MonoBehaviour {
 	static Object playerPrefab;
 	public GameObject playerPref;
 	static Tile startPos;
-	int maxSteps = 5;
-	int stepCounter = 0;
+	static int maxSteps = 5;
+	static int stepCounter = 0;
 
 	[PunRPC]
-	public void MakeTurn(int x, int y, int id, bool num) {
+	public void MakeTurn(int x, int y, int id, bool num, int victim_id) {
 		Debug.Log ("In PUN");
-		ServerLogic.SetTurn (new Turn(x,y,id), num);
+		ServerLogic.SetTurn (new Turn(x,y,id, victim_id), num);
 	}
 
 	void Start() {
@@ -32,7 +32,9 @@ public class ClientBehavior: Photon.MonoBehaviour {
 			Player me = (Player)players[keySelf];
 
 			if (Input.GetButtonUp ("Jump")) {
-				this.photonView.RPC ("MakeTurn", PhotonTargets.MasterClient,me.x,me.y,keySelf, PhotonNetwork.isMasterClient);
+				int vic = victim == null ? -1 : victim.id;
+				Debug.Log("ClientBehavior vic: " + vic);
+				this.photonView.RPC ("MakeTurn", PhotonTargets.MasterClient,me.x,me.y,keySelf, PhotonNetwork.isMasterClient, vic);
 			}
 
 			if (Input.GetKeyUp(KeyCode.W)) {
@@ -143,6 +145,7 @@ public class ClientBehavior: Photon.MonoBehaviour {
 		}
 
 		p.prefab = t.transform;
+		t.GetComponent<CharacterBehavior>().id = key;
 	}
 
 	public static void MovePlayer(int key, int x, int y) {
@@ -154,6 +157,28 @@ public class ClientBehavior: Photon.MonoBehaviour {
 		//Transform t = Transform.Instantiate(playerPrefab, tile.data, Quaternion.identity) as Transform;
 		Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
 		p.prefab.transform.position = tile.data + pitch;
+
+		if (key == keySelf) {
+			stepCounter = 0;
+			startPos = (Tile)BoardManager.tiles[x][y];
+			victim = null;
+		}
+	}
+
+	public static Player GetMe() {
+		return (Player)players[keySelf];
+	}
+
+	public static void Murder(int victim_id) {
+		Player p = (Player)players[victim_id];
+		p.prefab.GetComponent<CharacterBehavior>().Kill();
+		players.Remove(victim_id);
+	}
+
+	static Player victim;
+
+	public static void SetVictim(Player p) {
+		victim = p;
 	}
 
 }

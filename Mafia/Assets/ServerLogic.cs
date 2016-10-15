@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ServerLogic : Photon.MonoBehaviour {
 
-	const int NUM_BOTS = 1;
+	const int NUM_BOTS = 5;
 
 	static TurnInfo police;
 	static TurnInfo mafia;
@@ -73,6 +73,9 @@ public class ServerLogic : Photon.MonoBehaviour {
 		this.photonView.RPC ("MoveCharacter", PhotonTargets.AllBuffered, 0, police.turn.x, police.turn.y);
 		this.photonView.RPC ("MoveCharacter", PhotonTargets.AllBuffered, 1, mafia.turn.x, mafia.turn.y);
 		//move bots algorythm here: where p.type == PlayerType.Bot
+		if (mafia.turn.victim_id > 10000) {
+			this.photonView.RPC("Murder", PhotonTargets.AllBuffered, mafia.turn.victim_id);
+		}
 		//ClientBehavior.players.Values
 		foreach(Player p in ClientBehavior.players.Values){
 			if(p.type == PlayerType.Bot) {
@@ -84,11 +87,16 @@ public class ServerLogic : Photon.MonoBehaviour {
 	void MoveBot(Player p) {
 		for(int i = 0; i < 5; i++) {
 			ArrayList l = BoardManager.getPossiblePaths(p.x,p.y);
-			Tile t = l[Random.Range(0,l.Count)];
+			Tile t = (Tile)l[Random.Range(0,l.Count)];
 			p.x = t.x;
 			p.y = t.y;
 		}
 		this.photonView.RPC("MoveCharacter", PhotonTargets.AllBuffered, p.id, p.x, p.y);
+	}
+
+	[PunRPC]
+	public void Murder(int victim_id) {
+		ClientBehavior.Murder(victim_id);
 	}
 
 	[PunRPC]
@@ -122,12 +130,14 @@ public class Turn
 	public int id;
 	public int x;
 	public int y;
+	public int victim_id;
 
-	public Turn(int x, int y,int id)
+	public Turn(int x, int y, int id, int victim_id)
 	{
 		this.x = x;
 		this.y = y;
 		this.id = id;
+		this.victim_id = victim_id;
 	}
 }
 

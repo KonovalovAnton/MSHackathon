@@ -78,22 +78,22 @@ public class BoardManager : MonoBehaviour {
 		if (y > 0 && ((Tile)tiles[x][y - 1]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x][y-1]);
 
-		if (x + 1 < columns && y > 0 && ((Tile)tiles[x + 1][y - 1]).tileType == TileType.PASSABLE)
+		if (x + 1 < columns - 1 && y > 0 && ((Tile)tiles[x + 1][y - 1]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x + 1][y - 1]);
 
 		if (x > 0 && ((Tile)tiles[x - 1][y]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x -1][y]);
 
-		if (x + 1 < columns && ((Tile)tiles[x + 1][y]).tileType == TileType.PASSABLE)
-			res.Add(tiles[x -1][y]);
+		if (x + 1 < columns - 1 && ((Tile)tiles[x + 1][y]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x + 1][y]);
 
-		if (x > 0 && y + 1 < rows && ((Tile)tiles[x - 1][y + 1]).tileType == TileType.PASSABLE)
+		if (x > 0 && y + 1 < rows - 1 && ((Tile)tiles[x - 1][y + 1]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x - 1][y + 1]);
 
-		if (y + 1 < rows && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
+		if (y + 1 < rows - 1 && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x][y + 1]);
 
-		if (x + 1 < columns && y + 1 < rows && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
+		if (x + 1 < columns - 1 && y + 1 < rows - 1 && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
 			res.Add(tiles[x + 1][y + 1]);
 
 		return res;
