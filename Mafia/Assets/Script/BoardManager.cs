@@ -1,25 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 using System;
 
 public class BoardManager : MonoBehaviour {
 
 
-	public int columns = 8;
-	public int rows = 10;
+	public static int columns = 8;
+	public static int rows = 10;
 	public GameObject floorTile;
 	public GameObject outerWall;
 	private Transform boardHolder;
 	private List <Vector2> gridPositions = new List<Vector2>();
+	public static Tile[][] tiles;
 
 	void InitList() {
+		tiles = new Tile[columns][];
 		gridPositions.Clear();
-
-		for (int x = 1; x < columns - 1; x += 1) {
-			for (int y = 1; y < rows - 1; y += 1) {
-				gridPositions.Add(new Vector2(x, y));
-			}
-		}
 	}
 
 	void BoardSetup() {
@@ -35,6 +32,7 @@ public class BoardManager : MonoBehaviour {
 			x = x_offset;
 			y = y_offset;
 
+			tiles[i] = new Tile[rows]; 
 			for (int j = 0; j < rows; j += 1) {
 
 				GameObject toInstance = floorTile;
@@ -43,10 +41,14 @@ public class BoardManager : MonoBehaviour {
 				GameObject instance = 
 					Instantiate(toInstance, new Vector2(x, y), Quaternion.identity) as GameObject;
 
+
+				tiles[i][j] = new Tile(i, j, new Vector2(x, y), TileType.PASSABLE, instance);
+
+
 				x += 0.5f;
 				y -= 0.25f;
 
-				instance.transform.SetParent(boardHolder);
+				//instance.transform.SetParent(boardHolder);
 
 			}
 
@@ -55,20 +57,57 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	Vector2 randomPosition() {
+//	Vector2 randomPosition() {
+//
+//		int randomIndex_x = UnityEngine.Random.Range(0, columns);
+//		int randomIndex_y = UnityEngine.Random.Range(0, rows);
+//
+//		Vector2 randomPos = gridPositions[randomIndex];
+//
+//		gridPositions.RemoveAt(randomIndex);
+//
+//		return randomPos;
+//	}
 
-		int randomIndex = UnityEngine.Random.Range(0, gridPositions.Count);
+	public static ArrayList getPossiblePaths(int x, int y) {
+		ArrayList res = new ArrayList();
 
-		Vector2 randomPos = gridPositions[randomIndex];
+		if (x > 0 && y > 0 && ((Tile)tiles[x - 1][y - 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x- 1][y - 1]);
 
-		gridPositions.RemoveAt(randomIndex);
+		if (y > 0 && ((Tile)tiles[x][y - 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x][y-1]);
 
-		return randomPos;
+		if (x + 1 < columns && y > 0 && ((Tile)tiles[x + 1][y - 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x + 1][y - 1]);
+
+		if (x > 0 && ((Tile)tiles[x - 1][y]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x -1][y]);
+
+		if (x + 1 < columns && ((Tile)tiles[x + 1][y]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x -1][y]);
+
+		if (x > 0 && y + 1 < rows && ((Tile)tiles[x - 1][y + 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x - 1][y + 1]);
+
+		if (y + 1 < rows && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x][y + 1]);
+
+		if (x + 1 < columns && y + 1 < rows && ((Tile)tiles[x][y + 1]).tileType == TileType.PASSABLE)
+			res.Add(tiles[x + 1][y + 1]);
+
+		return res;
+	}
+
+	public static bool isPassable(int x, int y) {
+		if(x > columns-1 || x < 0 || y < 0 || y > rows-1)
+			return false;
+		return ((Tile)tiles[x][y]).tileType == TileType.PASSABLE ? true : false;
 	}
 
 	public void SetupScene() {
-		BoardSetup();
 		InitList();
+		BoardSetup();
 	}
 
 	// Use this for initialization

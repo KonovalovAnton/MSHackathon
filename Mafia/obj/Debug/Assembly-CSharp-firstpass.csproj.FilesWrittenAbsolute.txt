@@ -1,7 +1,13 @@
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Assembly-CSharp-firstpass.dll.mdb
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Assembly-CSharp-firstpass.dll
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/obj/Debug/Assembly-CSharp-firstpass.dll
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/obj/Debug/Assembly-CSharp-firstpass.dll.mdb
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/UnityEngine.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/UnityEditor.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/UnityEngine.UI.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/UnityEngine.Networking.dll
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Photon3Unity3D.dll
+/Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/websocket-sharp.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Mono.Cecil.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Unity.SerializationLogic.dll
 /Users/rostislavsmirnov/Desktop/MSHackathon/Mafia/Temp/bin/Debug/Unity.DataContract.dll

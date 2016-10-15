@@ -4,12 +4,21 @@ using System.Collections;
 public class ClientBehavior: Photon.MonoBehaviour {
 
 	public static Hashtable players;
-	static int keySelf = -1;
+	public static int keySelf = -1;
+	static Object playerPrefab;
+	public GameObject playerPref;
+	static Tile startPos;
+	int maxSteps = 5;
+	int stepCounter = 0;
 
 	[PunRPC]
 	public void MakeTurn(int x, int y, int id, bool num) {
 		Debug.Log ("In PUN");
 		ServerLogic.SetTurn (new Turn(x,y,id), num);
+	}
+
+	void Start() {
+		playerPrefab = playerPref;
 	}
 
 	void Update()
@@ -18,13 +27,122 @@ public class ClientBehavior: Photon.MonoBehaviour {
 			players = new Hashtable ();
 		}
 
-		if (Input.GetButtonUp ("Jump")) {
-			this.photonView.RPC ("MakeTurn", PhotonTargets.MasterClient, 1,1,0, PhotonNetwork.isMasterClient);
+		if(keySelf!=-1) {
+			
+			Player me = (Player)players[keySelf];
+
+			if (Input.GetButtonUp ("Jump")) {
+				this.photonView.RPC ("MakeTurn", PhotonTargets.MasterClient,me.x,me.y,keySelf, PhotonNetwork.isMasterClient);
+			}
+
+			if (Input.GetKeyUp(KeyCode.W)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x - 1,me.y - 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x - 1][me.y - 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x--;
+					me.y--;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.Q)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x,me.y - 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x][me.y - 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.y--;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.A)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x + 1,me.y - 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x + 1][me.y - 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x++;
+					me.y--;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.E)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x - 1,me.y)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x - 1][me.y];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x--;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.S)) {
+				stepCounter = 0;
+				Tile go = BoardManager.tiles[startPos.x][startPos.y];
+				Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+				me.prefab.transform.position = go.data + pitch;
+				me.x = startPos.x;
+				me.y = startPos.y;
+			}
+			if (Input.GetKeyUp(KeyCode.Z)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x + 1,me.y)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x + 1][me.y];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x++;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.D)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x - 1,me.y + 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x - 1][me.y + 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x--;
+					me.y++;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.C)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x,me.y + 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x][me.y + 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.y++;
+					return;
+				}
+			}
+			if (Input.GetKeyUp(KeyCode.X)) {
+				if(stepCounter < maxSteps && BoardManager.isPassable(me.x + 1,me.y + 1)) {
+					stepCounter++;
+					Tile go = BoardManager.tiles[me.x + 1][me.y + 1];
+					Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+					me.prefab.transform.position = go.data + pitch;
+					me.x++;
+					me.y++;
+					return;
+				}
+			}
 		}
 	}
 
 	public static void AddPlayer(int key, Player p) {
 		players.Add (key, p);
+		Tile tile = BoardManager.tiles[p.x][p.y];
+		//Transform t = Transform.Instantiate(playerPrefab, tile.data, Quaternion.identity) as Transform;
+		Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+		GameObject t = Instantiate(playerPrefab, tile.data + pitch, Quaternion.identity) as GameObject;
+		t.GetComponent<SpriteRenderer>().sortingOrder = 2 + p.y;
+		if (key == keySelf) {
+			t.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);
+			startPos = tile.deepCopy();
+		}
+
+		p.prefab = t.transform;
 	}
 
 	public static void MovePlayer(int key, int x, int y) {
@@ -32,6 +150,10 @@ public class ClientBehavior: Photon.MonoBehaviour {
 		p.x = x;
 		p.y = y;
 		//possibly move players on client here
+		Tile tile = BoardManager.tiles[p.x][p.y];
+		//Transform t = Transform.Instantiate(playerPrefab, tile.data, Quaternion.identity) as Transform;
+		Vector2 pitch = new Vector2(Random.value * 0.16f - 0.08f,Random.value * 0.1f - 0.08f);
+		p.prefab.transform.position = tile.data + pitch;
 	}
 
 }
@@ -40,8 +162,9 @@ public class Player
 {
 	public int x;
 	public int y;
-	int id;
-	PlayerType type;
+	public int id;
+	public PlayerType type;
+	public Transform prefab;
 
 	public Player(int id, PlayerType type,int x, int y)
 	{
