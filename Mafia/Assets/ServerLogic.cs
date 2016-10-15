@@ -7,7 +7,7 @@ public class ServerLogic : Photon.MonoBehaviour {
 
 	static TurnInfo police;
 	static TurnInfo mafia;
-	static int idSource = 10000;
+	static int idSource = 10001;
 
 	public static void SetTurn(Turn t, bool master) {
 		if (master) {
@@ -76,6 +76,7 @@ public class ServerLogic : Photon.MonoBehaviour {
 		if (mafia.turn.victim_id > 10000) {
 			this.photonView.RPC("Murder", PhotonTargets.AllBuffered, mafia.turn.victim_id);
 		}
+			
 		//ClientBehavior.players.Values
 		foreach(Player p in ClientBehavior.players.Values){
 			if(p.type == PlayerType.Bot) {
@@ -131,13 +132,15 @@ public class Turn
 	public int x;
 	public int y;
 	public int victim_id;
+	public int witness_id;
 
-	public Turn(int x, int y, int id, int victim_id)
+	public Turn(int x, int y, int id, int victim_id, int witns_id)
 	{
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.victim_id = victim_id;
+		this.witness_id = witns_id;
 	}
 }
 
